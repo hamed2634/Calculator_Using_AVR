@@ -10,7 +10,7 @@
 
 void Math_voidInit();
 void set_factorial();
-double Float_Abs(double a,double b);
+double Float_Abs(double a);
 double LN(double x);
 double e(double x);
 double power(double a,double b);

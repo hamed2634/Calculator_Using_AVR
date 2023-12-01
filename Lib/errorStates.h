@@ -7,7 +7,8 @@ typedef enum { ES_OK,
 	   ES_NULL_POINTER,
 	   ES_OUT_OF_RANGE,
 	   ES_SYNTAX_ERROR,
-	   ES_MATH_ERROR
+	   ES_MATH_ERROR,
+	   ES_OVERFLOW
 }ES;
 
 #endif /* ERRORSTATES_H_ */

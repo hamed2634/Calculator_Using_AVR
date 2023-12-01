@@ -12,9 +12,9 @@ int max(int a, int b){
 	if(a > b) return a;
 	return b;
 }
-double Float_Abs(double a,double b){
-	if(a > b) return a - b;
-	return b - a;
+double Float_Abs(double a){
+	if(a > 0) return a;
+	return -1 * a;
 }
 
 void Math_voidInit(){
@@ -57,5 +57,16 @@ double e(double x){
 }
 
 double power(double a,double b){
-    return e(b * LN(a));
+	if(b < 0){
+		a = 1/a;
+		b *= -1;
+	}
+	long IntegerVal = b;
+	double ans = 1;
+	for(int i = 0; i < IntegerVal; i++){
+		ans *= a;
+	}
+	b -= IntegerVal;
+	ans *= e(b * LN(a));
+    return ans;
 }

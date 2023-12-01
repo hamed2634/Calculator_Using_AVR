@@ -40,17 +40,11 @@ void Clear_Arrays(){
 
 void Run_Calculator(){
 	int idx = 0;
-	u8 LCD_ShouldBeCleared = 0;
 	u8 LCD_DoneCalculating = 0;
 	while(1){
 		u8 pressed;
 		Keypad_enuGetPressedButton(&pressed);
 		if(pressed == KEYPAD_STATE_NO_PRESSED) continue;
-		if(LCD_ShouldBeCleared) {
-			LCD_enuClearDisplay();
-			LCD_ShouldBeCleared = 0;
-		}
-
 
 		if(LCD_DoneCalculating){
 			if(pressed == '=') continue;
@@ -73,7 +67,7 @@ void Run_Calculator(){
 				GlobalInputExpression[idx++] = pressed;
 				LCD_enuDisplayChar(pressed);
 			}
-			else if(Is_Number(pressed)){
+			else {
 				idx = 0;
 				LCD_enuClearDisplay();
 				Clear_Arrays();
@@ -83,10 +77,19 @@ void Run_Calculator(){
 			LCD_DoneCalculating = 0;
 		}
 		else{
-			if(pressed != 'A' && pressed != 'C') {
-				LCD_enuDisplayChar(pressed);
+			if(pressed == 'A'){
+				LCD_enuClearDisplay();
+				Clear_Arrays();
+				idx = 0;
 			}
-			if(pressed == '='){
+			else if(pressed == 'C'){
+				GlobalInputExpression[idx--] = '\0';
+				idx = max(0,idx);
+				LCD_enuGoto(1,idx);
+				LCD_enuDisplayChar(' ');
+				LCD_enuGoto(1,idx);
+			}
+			else if(pressed == '='){
 				LCD_DoneCalculating = 1;
 				ES Local_enuErrorState = Validate_Expression();
 				if(Local_enuErrorState == ES_SYNTAX_ERROR){
@@ -104,47 +107,49 @@ void Run_Calculator(){
 					LCD_enuDisplayChar('R');
 					LCD_enuDisplayChar('O');
 					LCD_enuDisplayChar('R');
-					LCD_ShouldBeCleared = 1;
-				}
-				else if(Local_enuErrorState == ES_MATH_ERROR){
-					LCD_enuClearDisplay();
-					LCD_enuGoto(1,3);
-					LCD_enuDisplayChar('M');
-					LCD_enuDisplayChar('A');
-					LCD_enuDisplayChar('T');
-					LCD_enuDisplayChar('H');
-					LCD_enuDisplayChar(' ');
-					LCD_enuDisplayChar('E');
-					LCD_enuDisplayChar('R');
-					LCD_enuDisplayChar('R');
-					LCD_enuDisplayChar('O');
-					LCD_enuDisplayChar('R');
-					LCD_ShouldBeCleared = 1;
 				}
 				else if(Local_enuErrorState == ES_OK){
 					LCD_enuGoto(2,0);
-					Calc_Expression();
-					for(u8 i = 0; i < MAX_SIZE; i++){
-						LCD_enuDisplayChar(GlobalResultExpression[i]);
+					Local_enuErrorState = Calc_Expression();
+					if(Local_enuErrorState == ES_MATH_ERROR){
+						LCD_enuClearDisplay();
+						LCD_enuGoto(1,3);
+						LCD_enuDisplayChar('M');
+						LCD_enuDisplayChar('A');
+						LCD_enuDisplayChar('T');
+						LCD_enuDisplayChar('H');
+						LCD_enuDisplayChar(' ');
+						LCD_enuDisplayChar('E');
+						LCD_enuDisplayChar('R');
+						LCD_enuDisplayChar('R');
+						LCD_enuDisplayChar('O');
+						LCD_enuDisplayChar('R');
+					}
+					else if(Local_enuErrorState == ES_OVERFLOW){
+						LCD_enuClearDisplay();
+						LCD_enuGoto(1,4);
+						LCD_enuDisplayChar('O');
+						LCD_enuDisplayChar('V');
+						LCD_enuDisplayChar('E');
+						LCD_enuDisplayChar('R');
+						LCD_enuDisplayChar('F');
+						LCD_enuDisplayChar('L');
+						LCD_enuDisplayChar('O');
+						LCD_enuDisplayChar('W');
+					}
+					else{
+						for(u8 i = 0; i < MAX_SIZE; i++){
+							LCD_enuDisplayChar(GlobalResultExpression[i]);
+						}
 					}
 				}
 			}
-			else if(pressed == 'A'){
-				LCD_enuClearDisplay();
-				Clear_Arrays();
-				idx = 0;
-				LCD_ShouldBeCleared = 0;
-			}
-			else if(pressed == 'C'){
-				GlobalInputExpression[idx--] = '\0';
-				idx = max(0,idx);
-				LCD_enuGoto(1,idx);
-				LCD_enuDisplayChar(' ');
-				LCD_enuGoto(1,idx);
-			}
-			else{
+			else {
+				LCD_enuDisplayChar(pressed);
 				GlobalInputExpression[idx++] = pressed;
 			}
+
+
 		}
 
 	}
@@ -152,11 +157,14 @@ void Run_Calculator(){
 
 
 ES Calc_Expression(){
-    ES Local_enuErrorState = ES_NOK;
+    ES Local_enuErrorState;
     Infix_To_Postfix();
     double Local_DoubleResult;
-    Calc_Postfix(&Local_DoubleResult);
+    Local_enuErrorState = Calc_Postfix(&Local_DoubleResult);
 
+
+    if(Local_enuErrorState == ES_MATH_ERROR) return ES_MATH_ERROR;
+    if(Local_DoubleResult > MAXNUMBER) return ES_OVERFLOW;
 
     u8 Local_Idx = 0;
 
@@ -168,38 +176,26 @@ ES Calc_Expression(){
 
 
     long Local_longValue = Local_DoubleResult;
-    Local_DoubleResult -= Local_longValue;
+    long Local_tmp = Local_longValue;
 
-
-    u8 Local_u8TrailingZeros = 0;
-    long Local_longReversedNumber = 0;
-
-    while(Local_longValue && !(Local_longValue%10)){
-    	Local_longValue /= 10;
-    	Local_u8TrailingZeros++;
+    if(!Local_longValue){
+        GlobalResultExpression[Local_Idx++] = '0';
     }
 
-    while(Local_longValue){
-    	Local_longReversedNumber *= 10;
-    	Local_longReversedNumber += Local_longValue %10;
+    Local_DoubleResult -= Local_longValue;
+    int Local_Size = 0;
+    while(Local_tmp){
+        Local_Size++;
+        Local_tmp/=10;
+    }
+    for (int i = Local_Size + Local_Idx - 1; i >= Local_Idx; --i) {
+        GlobalResultExpression[i] = (Local_longValue %10) + '0';
         Local_longValue/=10;
     }
-
-
-
-    //Printing Integer value
-    while(Local_longReversedNumber){
-    	GlobalResultExpression[Local_Idx++] = ((u8)(Local_longReversedNumber % 10 + '0'));
-    	Local_longReversedNumber /= 10;
-    }
-
-    //printing Trailing Zeros
-    for(u8 i = 0; i < Local_u8TrailingZeros; i++){
-    	GlobalResultExpression[Local_Idx++] = '0';
-    }
+    Local_Idx += Local_Size ;
 
     //printing Fraction
-    if(Float_Abs(Local_DoubleResult, (long)Local_DoubleResult) > EPS){
+    if(Float_Abs(Local_DoubleResult - (long)Local_DoubleResult) > EPS){
     	GlobalResultExpression[Local_Idx++] = '.';
     	for(u8 i = 0; i < PRECISION_DIGITS; i++){
     		Local_DoubleResult *= 10;
@@ -292,6 +288,7 @@ ES Calc_Postfix(double * Copy_pDoubleResult){
                         Push(&st, op1);
                         break;
                     case '/':
+                    	if(Float_Abs(GlobalOperands[op2 - 'A']) < EPS) return ES_MATH_ERROR;
                         GlobalOperands[op1 - 'A'] = GlobalOperands[op1 - 'A'] / GlobalOperands[op2 - 'A'];
                         Push(&st, op1);
                         break;
@@ -474,7 +471,7 @@ ES Validate_Expression(){
 			}
 		}
 	}
-    if(Local_s64Operand){
+    if(GlobalShaddedExpression[ShadedExpressionIdx - 1] != ')'){
         GlobalShaddedExpression[ShadedExpressionIdx++] = 'A' + OperandsArrIdx;
         if(IsNegative){
             GlobalOperands[OperandsArrIdx++] = -1 * Local_s64Operand;
@@ -500,6 +497,10 @@ ES Validate_Expression(){
         }
     }
 	if(!Stack_Empty(&Local_stBrackets)) {
+		return ES_SYNTAX_ERROR;
+	}
+
+	if(Local_ExpIt && Is_Operator(GlobalInputExpression[Local_ExpIt - 1])){
 		return ES_SYNTAX_ERROR;
 	}
 

@@ -12,6 +12,7 @@
 #define MAX_SIZE 20
 #define EPS 0.00001
 #define PRECISION_DIGITS 4
+#define MAXNUMBER (double)(2000000000)
 
 
 void Clear_Arrays();
