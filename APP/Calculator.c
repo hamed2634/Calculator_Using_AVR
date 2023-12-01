@@ -41,6 +41,7 @@ void Clear_Arrays(){
 void Run_Calculator(){
 	int idx = 0;
 	u8 LCD_ShouldBeCleared = 0;
+	u8 LCD_DoneCalculating = 0;
 	while(1){
 		u8 pressed;
 		Keypad_enuGetPressedButton(&pressed);
@@ -50,66 +51,102 @@ void Run_Calculator(){
 			LCD_ShouldBeCleared = 0;
 		}
 
-		if(pressed != 'A' && pressed != 'C') LCD_enuDisplayChar(pressed);
 
-		if(pressed == '='){
-			ES Local_enuErrorState = Validate_Expression();
-			if(Local_enuErrorState == ES_SYNTAX_ERROR){
+		if(LCD_DoneCalculating){
+			if(pressed == '=') continue;
+			else if(pressed == 'A' || pressed == 'C'){
+				Clear_Arrays();
+				idx = 0;
 				LCD_enuClearDisplay();
-				LCD_enuGoto(1,2);
-				LCD_enuDisplayChar('S');
-				LCD_enuDisplayChar('Y');
-				LCD_enuDisplayChar('N');
-				LCD_enuDisplayChar('T');
-				LCD_enuDisplayChar('A');
-				LCD_enuDisplayChar('X');
-				LCD_enuDisplayChar(' ');
-				LCD_enuDisplayChar('E');
-				LCD_enuDisplayChar('R');
-				LCD_enuDisplayChar('R');
-				LCD_enuDisplayChar('O');
-				LCD_enuDisplayChar('R');
-				LCD_ShouldBeCleared = 1;
 			}
-			else if(Local_enuErrorState == ES_MATH_ERROR){
+			else if(Is_Operator(pressed)){
 				LCD_enuClearDisplay();
-				LCD_enuGoto(1,3);
-				LCD_enuDisplayChar('M');
-				LCD_enuDisplayChar('A');
-				LCD_enuDisplayChar('T');
-				LCD_enuDisplayChar('H');
-				LCD_enuDisplayChar(' ');
-				LCD_enuDisplayChar('E');
-				LCD_enuDisplayChar('R');
-				LCD_enuDisplayChar('R');
-				LCD_enuDisplayChar('O');
-				LCD_enuDisplayChar('R');
-				LCD_ShouldBeCleared = 1;
+				for(int i = 0; i < MAX_SIZE; i++){
+					GlobalShaddedExpression[i] = 0;
+					GlobalInputExpression[i] = 0;
+					GlobalPostfixExpression[i] = 0;
+				}
+				for(idx = 0; GlobalResultExpression[idx]; idx++){
+					GlobalInputExpression[idx] = GlobalResultExpression[idx];
+					LCD_enuDisplayChar(GlobalInputExpression[idx]);
+				}
+				GlobalInputExpression[idx++] = pressed;
+				LCD_enuDisplayChar(pressed);
 			}
-			else if(Local_enuErrorState == ES_OK){
-				LCD_enuGoto(2,0);
-				Calc_Expression();
-				LCD_ShouldBeCleared = 1;
+			else if(Is_Number(pressed)){
+				idx = 0;
+				LCD_enuClearDisplay();
+				Clear_Arrays();
+				GlobalInputExpression[idx++] = pressed;
+				LCD_enuDisplayChar(pressed);
 			}
-			Clear_Arrays();
-			idx = 0;
-		}
-		else if(pressed == 'A'){
-			LCD_enuClearDisplay();
-			Clear_Arrays();
-			idx = 0;
-			LCD_ShouldBeCleared = 0;
-		}
-		else if(pressed == 'C'){
-			GlobalInputExpression[idx--] = '\0';
-			idx = max(0,idx);
-			LCD_enuGoto(1,idx);
-			LCD_enuDisplayChar(' ');
-			LCD_enuGoto(1,idx);
+			LCD_DoneCalculating = 0;
 		}
 		else{
-			GlobalInputExpression[idx++] = pressed;
+			if(pressed != 'A' && pressed != 'C') {
+				LCD_enuDisplayChar(pressed);
+			}
+			if(pressed == '='){
+				LCD_DoneCalculating = 1;
+				ES Local_enuErrorState = Validate_Expression();
+				if(Local_enuErrorState == ES_SYNTAX_ERROR){
+					LCD_enuClearDisplay();
+					LCD_enuGoto(1,2);
+					LCD_enuDisplayChar('S');
+					LCD_enuDisplayChar('Y');
+					LCD_enuDisplayChar('N');
+					LCD_enuDisplayChar('T');
+					LCD_enuDisplayChar('A');
+					LCD_enuDisplayChar('X');
+					LCD_enuDisplayChar(' ');
+					LCD_enuDisplayChar('E');
+					LCD_enuDisplayChar('R');
+					LCD_enuDisplayChar('R');
+					LCD_enuDisplayChar('O');
+					LCD_enuDisplayChar('R');
+					LCD_ShouldBeCleared = 1;
+				}
+				else if(Local_enuErrorState == ES_MATH_ERROR){
+					LCD_enuClearDisplay();
+					LCD_enuGoto(1,3);
+					LCD_enuDisplayChar('M');
+					LCD_enuDisplayChar('A');
+					LCD_enuDisplayChar('T');
+					LCD_enuDisplayChar('H');
+					LCD_enuDisplayChar(' ');
+					LCD_enuDisplayChar('E');
+					LCD_enuDisplayChar('R');
+					LCD_enuDisplayChar('R');
+					LCD_enuDisplayChar('O');
+					LCD_enuDisplayChar('R');
+					LCD_ShouldBeCleared = 1;
+				}
+				else if(Local_enuErrorState == ES_OK){
+					LCD_enuGoto(2,0);
+					Calc_Expression();
+					for(u8 i = 0; i < MAX_SIZE; i++){
+						LCD_enuDisplayChar(GlobalResultExpression[i]);
+					}
+				}
+			}
+			else if(pressed == 'A'){
+				LCD_enuClearDisplay();
+				Clear_Arrays();
+				idx = 0;
+				LCD_ShouldBeCleared = 0;
+			}
+			else if(pressed == 'C'){
+				GlobalInputExpression[idx--] = '\0';
+				idx = max(0,idx);
+				LCD_enuGoto(1,idx);
+				LCD_enuDisplayChar(' ');
+				LCD_enuGoto(1,idx);
+			}
+			else{
+				GlobalInputExpression[idx++] = pressed;
+			}
 		}
+
 	}
 }
 
@@ -120,8 +157,19 @@ ES Calc_Expression(){
     double Local_DoubleResult;
     Calc_Postfix(&Local_DoubleResult);
 
+
+    u8 Local_Idx = 0;
+
+    //printing Sign
+    if(Local_DoubleResult < 0) {
+    	GlobalResultExpression[Local_Idx++] = '-';
+        Local_DoubleResult *= -1;
+    }
+
+
     long Local_longValue = Local_DoubleResult;
     Local_DoubleResult -= Local_longValue;
+
 
     u8 Local_u8TrailingZeros = 0;
     long Local_longReversedNumber = 0;
@@ -137,26 +185,25 @@ ES Calc_Expression(){
         Local_longValue/=10;
     }
 
-    //printing Sign
-    if(Local_DoubleResult < 0) LCD_enuDisplayChar('-');
+
 
     //Printing Integer value
     while(Local_longReversedNumber){
-    	LCD_enuDisplayChar((u8)(Local_longReversedNumber % 10 + '0'));
+    	GlobalResultExpression[Local_Idx++] = ((u8)(Local_longReversedNumber % 10 + '0'));
     	Local_longReversedNumber /= 10;
     }
 
     //printing Trailing Zeros
     for(u8 i = 0; i < Local_u8TrailingZeros; i++){
-    	LCD_enuDisplayChar('0');
+    	GlobalResultExpression[Local_Idx++] = '0';
     }
 
     //printing Fraction
     if(Float_Abs(Local_DoubleResult, (long)Local_DoubleResult) > EPS){
-    	LCD_enuDisplayChar('.');
+    	GlobalResultExpression[Local_Idx++] = '.';
     	for(u8 i = 0; i < PRECISION_DIGITS; i++){
     		Local_DoubleResult *= 10;
-        	LCD_enuDisplayChar((long)Local_DoubleResult %10 + '0');
+    		GlobalResultExpression[Local_Idx++] = ((long)Local_DoubleResult %10 + '0');
     	}
     }
 

@@ -183,7 +183,7 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x43f8
+.text           0x00000000     0x4598
  *(.vectors)
  .vectors       0x00000000       0x54 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -401,59 +401,59 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
                 0x00002a06       0x5e ./APP/Calculator.o
                 0x00002a06                Clear_Arrays
  .text.Run_Calculator
-                0x00002a64      0x19c ./APP/Calculator.o
+                0x00002a64      0x2d6 ./APP/Calculator.o
                 0x00002a64                Run_Calculator
  .text.Calc_Expression
-                0x00002c00      0x2d4 ./APP/Calculator.o
-                0x00002c00                Calc_Expression
+                0x00002d3a      0x33a ./APP/Calculator.o
+                0x00002d3a                Calc_Expression
  .text.priority
-                0x00002ed4       0x4a ./APP/Calculator.o
-                0x00002ed4                priority
+                0x00003074       0x4a ./APP/Calculator.o
+                0x00003074                priority
  .text.Infix_To_Postfix
-                0x00002f1e      0x24e ./APP/Calculator.o
-                0x00002f1e                Infix_To_Postfix
+                0x000030be      0x24e ./APP/Calculator.o
+                0x000030be                Infix_To_Postfix
  .text.Calc_Postfix
-                0x0000316c      0x42c ./APP/Calculator.o
-                0x0000316c                Calc_Postfix
+                0x0000330c      0x42c ./APP/Calculator.o
+                0x0000330c                Calc_Postfix
  .text.Is_Operator
-                0x00003598       0x48 ./APP/Calculator.o
-                0x00003598                Is_Operator
+                0x00003738       0x48 ./APP/Calculator.o
+                0x00003738                Is_Operator
  .text.Is_Open_Brackets
-                0x000035e0       0x24 ./APP/Calculator.o
-                0x000035e0                Is_Open_Brackets
+                0x00003780       0x24 ./APP/Calculator.o
+                0x00003780                Is_Open_Brackets
  .text.Is_Close_Brackets
-                0x00003604       0x24 ./APP/Calculator.o
-                0x00003604                Is_Close_Brackets
+                0x000037a4       0x24 ./APP/Calculator.o
+                0x000037a4                Is_Close_Brackets
  .text.Is_Number
-                0x00003628       0x36 ./APP/Calculator.o
-                0x00003628                Is_Number
+                0x000037c8       0x36 ./APP/Calculator.o
+                0x000037c8                Is_Number
  .text.Validate_Expression
-                0x0000365e      0xa40 ./APP/Calculator.o
-                0x0000365e                Validate_Expression
- .text.main     0x0000409e       0x26 ./APP/main.o
-                0x0000409e                main
- .text.libgcc   0x000040c4       0x3e d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
-                0x000040c4                __mulsi3
- .text.libgcc   0x00004102       0x36 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
-                0x00004102                __divmodsi4
- .text.libgcc   0x00004138        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00004138        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00004138        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .text.libgcc   0x00004138       0x44 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
-                0x00004138                __udivmodsi4
- .text.libgcc   0x0000417c       0x38 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x0000417c                __prologue_saves__
- .text.libgcc   0x000041b4       0x36 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x000041b4                __epilogue_restores__
+                0x000037fe      0xa40 ./APP/Calculator.o
+                0x000037fe                Validate_Expression
+ .text.main     0x0000423e       0x26 ./APP/main.o
+                0x0000423e                main
+ .text.libgcc   0x00004264       0x3e d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                0x00004264                __mulsi3
+ .text.libgcc   0x000042a2       0x36 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+                0x000042a2                __divmodsi4
+ .text.libgcc   0x000042d8        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x000042d8        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x000042d8        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x000042d8       0x44 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                0x000042d8                __udivmodsi4
+ .text.libgcc   0x0000431c       0x38 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x0000431c                __prologue_saves__
+ .text.libgcc   0x00004354       0x36 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x00004354                __epilogue_restores__
  .text.avr-libc
-                0x000041ea      0x20a d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x000041ea                malloc
-                0x00004344                free
-                0x000043f4                . = ALIGN (0x2)
+                0x0000438a      0x20a d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x0000438a                malloc
+                0x000044e4                free
+                0x00004594                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000043f4        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000043f4                exit
-                0x000043f4                _exit
+ .fini9         0x00004594        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x00004594                exit
+                0x00004594                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -472,11 +472,11 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000043f4        0x4 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x00004594        0x4 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000043f8                _etext = .
+                0x00004598                _etext = .
 
-.data           0x00800060      0x13a load address 0x000043f8
+.data           0x00800060      0x13a load address 0x00004598
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
@@ -586,8 +586,8 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
                 0x008003ca                __brkval
                 0x008003cc                __flp
                 0x008003ce                PROVIDE (__bss_end, .)
-                0x000043f8                __data_load_start = LOADADDR (.data)
-                0x00004532                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00004598                __data_load_start = LOADADDR (.data)
+                0x000046d2                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x008003ce        0x0
                 0x008003ce                PROVIDE (__noinit_start, .)
@@ -612,7 +612,7 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x38c4
+.stab           0x00000000     0x3aa4
  *(.stab)
  .stab          0x00000000      0x948 ./MCAL/DIO/DIO_prog.o
  .stab          0x00000948      0x4b0 ./Lib/Stack/stack.o
@@ -625,14 +625,14 @@ LOAD d:/edu/cat/interfacing/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\
                                 0x1a4 (size before relaxing)
  .stab          0x000020c4      0x3c0 ./HAL/Keypad/Keypad_prog.o
                                 0x5d0 (size before relaxing)
- .stab          0x00002484     0x12cc ./APP/Calculator.o
-                               0x12d8 (size before relaxing)
- .stab          0x00003750      0x174 ./APP/main.o
+ .stab          0x00002484     0x14ac ./APP/Calculator.o
+                               0x14b8 (size before relaxing)
+ .stab          0x00003930      0x174 ./APP/main.o
                                 0x1e0 (size before relaxing)
 
-.stabstr        0x00000000     0x1725
+.stabstr        0x00000000     0x174f
  *(.stabstr)
- .stabstr       0x00000000     0x1725 ./MCAL/DIO/DIO_prog.o
+ .stabstr       0x00000000     0x174f ./MCAL/DIO/DIO_prog.o
 
 .stab.excl
  *(.stab.excl)
