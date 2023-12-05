@@ -68,5 +68,6 @@ double power(double a,double b){
 	}
 	b -= IntegerVal;
 	ans *= e(b * LN(a));
+
     return ans;
 }

@@ -39,58 +39,73 @@ void Clear_Arrays(){
 
 
 void Run_Calculator(){
-	int idx = 0;
+	u8 Local_u8CursorIdx = 0;
+	u8 Local_u8ExpressionSize = 0;
 	u8 LCD_DoneCalculating = 0;
 	while(1){
-		u8 pressed;
-		Keypad_enuGetPressedButton(&pressed);
-		if(pressed == KEYPAD_STATE_NO_PRESSED) continue;
+		u8 Local_u8ButtonIsPressed;
+		Keypad_enuGetPressedButton(&Local_u8ButtonIsPressed);
+		if(Local_u8ButtonIsPressed == KEYPAD_STATE_NO_PRESSED) continue;
 
 		if(LCD_DoneCalculating){
-			if(pressed == '=') continue;
-			else if(pressed == 'A' || pressed == 'C'){
+			if(Local_u8ButtonIsPressed == '=') continue;
+			else if(Local_u8ButtonIsPressed == 'A' || Local_u8ButtonIsPressed == 'C'){
 				Clear_Arrays();
-				idx = 0;
+				Local_u8CursorIdx = 0;
 				LCD_enuClearDisplay();
 			}
-			else if(Is_Operator(pressed)){
+			else if(Is_Operator(Local_u8ButtonIsPressed)){
 				LCD_enuClearDisplay();
 				for(int i = 0; i < MAX_SIZE; i++){
 					GlobalShaddedExpression[i] = 0;
 					GlobalInputExpression[i] = 0;
 					GlobalPostfixExpression[i] = 0;
 				}
-				for(idx = 0; GlobalResultExpression[idx]; idx++){
-					GlobalInputExpression[idx] = GlobalResultExpression[idx];
-					LCD_enuDisplayChar(GlobalInputExpression[idx]);
+				for(Local_u8CursorIdx = 0; GlobalResultExpression[Local_u8CursorIdx]; Local_u8CursorIdx++){
+					GlobalInputExpression[Local_u8CursorIdx] = GlobalResultExpression[Local_u8CursorIdx];
+					LCD_enuDisplayChar(GlobalInputExpression[Local_u8CursorIdx]);
+					Local_u8ExpressionSize++;
 				}
-				GlobalInputExpression[idx++] = pressed;
-				LCD_enuDisplayChar(pressed);
+				GlobalInputExpression[Local_u8CursorIdx++] = Local_u8ButtonIsPressed;
+				LCD_enuDisplayChar(Local_u8ButtonIsPressed);
+				Local_u8ExpressionSize++;
 			}
-			else {
-				idx = 0;
+			else if(Local_u8ButtonIsPressed != '<' && Local_u8ButtonIsPressed != '>'){
+				Local_u8CursorIdx = 0;
 				LCD_enuClearDisplay();
 				Clear_Arrays();
-				GlobalInputExpression[idx++] = pressed;
-				LCD_enuDisplayChar(pressed);
+				GlobalInputExpression[Local_u8CursorIdx++] = Local_u8ButtonIsPressed;
+				LCD_enuDisplayChar(Local_u8ButtonIsPressed);
 			}
 			LCD_DoneCalculating = 0;
+
 		}
 		else{
-			if(pressed == 'A'){
+			if(Local_u8ButtonIsPressed == 'A'){
 				LCD_enuClearDisplay();
 				Clear_Arrays();
-				idx = 0;
+				Local_u8CursorIdx = 0;
+				Local_u8ExpressionSize = 0;
 			}
-			else if(pressed == 'C'){
-				GlobalInputExpression[idx--] = '\0';
-				idx = max(0,idx);
-				LCD_enuGoto(1,idx);
-				LCD_enuDisplayChar(' ');
-				LCD_enuGoto(1,idx);
+			else if(Local_u8ButtonIsPressed == 'C'){
+				if(Local_u8CursorIdx){
+					GlobalInputExpression[--Local_u8CursorIdx] = '\0';
+					LCD_enuClearDisplay();
+					for(u8 i = 0; i < Local_u8ExpressionSize - 1; i++){
+						if(!GlobalInputExpression[i]) {
+							GlobalInputExpression[i] = GlobalInputExpression[i + 1];
+							GlobalInputExpression[i + 1] = 0;
+						}
+						LCD_enuDisplayChar(GlobalInputExpression[i]);
+					}
+					Local_u8CursorIdx = max(0,Local_u8CursorIdx);
+					LCD_enuGoto(1,Local_u8CursorIdx);
+					Local_u8ExpressionSize--;
+				}
 			}
-			else if(pressed == '='){
+			else if(Local_u8ButtonIsPressed == '='){
 				LCD_DoneCalculating = 1;
+				Local_u8ExpressionSize = 0;
 				ES Local_enuErrorState = Validate_Expression();
 				if(Local_enuErrorState == ES_SYNTAX_ERROR){
 					LCD_enuClearDisplay();
@@ -144,14 +159,21 @@ void Run_Calculator(){
 					}
 				}
 			}
-			else {
-				LCD_enuDisplayChar(pressed);
-				GlobalInputExpression[idx++] = pressed;
+			else if(Local_u8ButtonIsPressed == '>') {
+				if(Local_u8CursorIdx + 1 < MAX_SIZE && GlobalInputExpression[Local_u8CursorIdx])Local_u8CursorIdx++;
+				LCD_enuGoto(1,Local_u8CursorIdx);
 			}
-
-
+			else if(Local_u8ButtonIsPressed == '<'){
+				Local_u8CursorIdx--;
+				Local_u8CursorIdx = max(0,Local_u8CursorIdx);
+				LCD_enuGoto(1,Local_u8CursorIdx);
+			}
+			else{
+				Local_u8ExpressionSize++;
+				LCD_enuDisplayChar(Local_u8ButtonIsPressed);
+				GlobalInputExpression[Local_u8CursorIdx++] = Local_u8ButtonIsPressed;
+			}
 		}
-
 	}
 }
 
@@ -161,7 +183,6 @@ ES Calc_Expression(){
     Infix_To_Postfix();
     double Local_DoubleResult;
     Local_enuErrorState = Calc_Postfix(&Local_DoubleResult);
-
 
     if(Local_enuErrorState == ES_MATH_ERROR) return ES_MATH_ERROR;
     if(Local_DoubleResult > MAXNUMBER) return ES_OVERFLOW;
@@ -293,6 +314,7 @@ ES Calc_Postfix(double * Copy_pDoubleResult){
                         Push(&st, op1);
                         break;
                     case '^':
+                    	if(GlobalOperands[op2 - 'A'] > 40) return ES_OVERFLOW;
                         GlobalOperands[op1 - 'A'] =  power(GlobalOperands[op1 - 'A'],GlobalOperands[op2 - 'A']) ;
                         Push(&st, op1);
                         break;
