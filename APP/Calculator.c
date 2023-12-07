@@ -63,6 +63,7 @@ void Run_Calculator(){
 				}
 				for(Local_u8CursorIdx = 0; GlobalResultExpression[Local_u8CursorIdx]; Local_u8CursorIdx++){
 					GlobalInputExpression[Local_u8CursorIdx] = GlobalResultExpression[Local_u8CursorIdx];
+					GlobalResultExpression[Local_u8CursorIdx] = 0;
 					LCD_enuDisplayChar(GlobalInputExpression[Local_u8CursorIdx]);
 					Local_u8ExpressionSize++;
 				}
