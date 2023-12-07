@@ -11,6 +11,8 @@ This embedded project implements a calculator using the AVR architecture, organi
   - [Variable Storage](#variable-storage-)
   - [Infix to Postfix Conversion](#infix-to-postfix-conversion-)
   - [Postfix Evaluation](#postfix-evaluation-)
+- [Testing](#testing-)
+- [Circuit Connection](#circuit-connection-)
 
 ## Construction
 
@@ -23,6 +25,18 @@ This calculator project is organized into three layers:
 ## Supported Calculations ✅
 
 The calculator supports basic arithmetic operations such as addition, subtraction, multiplication, and division. It can also handle parentheses, allowing users to input complex mathematical expressions. Furthermore, the calculator supports floating-point numbers for precise calculations.
+
+### Testing 🎥
+
+Check out the testing video to see the calculator in action:
+
+[Testing_Video](\Stimulation\Testing_Video)
+
+### Circuit Connection 📷
+
+Here's a photo showcasing the circuit connections:
+
+![Circuit_Connection](\Stimulation\Circuit_Connection)
 
 ## How It Works 🛠️
 
@@ -46,6 +60,8 @@ The postfix expression simplifies the evaluation process.
 
 ### Postfix Evaluation 🔄
 
-Finally, the postfix expression is evaluated using a stack-based approach. The AVR microcontroller efficiently processes each element of the expression and computes the result, adhering to the rules of the postfix notation.
+Finally, the postfix expression is evaluated using a stack-based approach. 
+
+The AVR microcontroller efficiently processes each element of the expression and computes the result, adhering to the rules of the postfix notation.
 
 This project's modular design and layered architecture make it flexible for future enhancements and adaptations.
