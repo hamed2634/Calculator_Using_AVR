@@ -8,7 +8,7 @@ This embedded project implements a calculator using the AVR architecture, organi
 - [Supported Calculations](#supported-calculations-)
 - [How It Works](#how-it-works-%EF%B8%8F)
   - [Expression Conversion](#expression-conversion-%EF%B8%8F)
-  - [Variable Storage](#Operands-storage-)
+  - [Operands Storage](#Operands-storage-)
   - [Infix to Postfix Conversion](#infix-to-postfix-conversion-%EF%B8%8F)
   - [Postfix Evaluation](#postfix-evaluation-)
 - [Testing](#testing-)
