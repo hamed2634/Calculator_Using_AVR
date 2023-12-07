@@ -8,7 +8,7 @@ This embedded project implements a calculator using the AVR architecture, organi
 - [Supported Calculations](#supported-calculations-)
 - [How It Works](#how-it-works-%EF%B8%8F)
   - [Expression Conversion](#expression-conversion-%EF%B8%8F)
-  - [Variable Storage](#variable-storage-)
+  - [Variable Storage](#Operands-storage-)
   - [Infix to Postfix Conversion](#infix-to-postfix-conversion-%EF%B8%8F)
   - [Postfix Evaluation](#postfix-evaluation-)
 - [Testing](#testing-)
@@ -16,11 +16,12 @@ This embedded project implements a calculator using the AVR architecture, organi
 
 ## Construction
 
-This calculator project is organized into three layers:
+This calculator project is organized into four layers:
 
 1. **MCAL (Microcontroller Abstraction Layer):** The lowest layer that abstracts the hardware details of the AVR microcontroller.
 2. **HAL (Hardware Abstraction Layer):** This layer provides a set of high-level functions to interact with the hardware components, enabling easier development of applications.
 3. **APP (Application):** The top layer where the calculator logic is implemented.
+4. **Lib (Libraries):** The place where I implement my math functions, errorstates, and standard types.
 
 ## Supported Calculations ✅
 
@@ -30,7 +31,9 @@ The calculator supports basic arithmetic operations such as addition, subtractio
 
 Check out the testing video to see the calculator in action:
 
-[Testing_Video](Stimulation/Testing_Video.mp4)
+
+https://github.com/hamed2634/Calculator_Using_AVR/assets/52867472/cc098352-3f5c-44f4-ba3f-541029177e0c
+
 
 ### Circuit Connection 📷
 
@@ -46,7 +49,7 @@ The first step is to convert the user-input mathematical expression into a stand
 
 For example, the expression `2*(1.9+0.1)` is converted to `A*(B+C)`.
 
-### Variable Storage 📊
+### Operands Storage 📊
 
 The converted expression is then parsed, and variables (A, B, C, etc.) are stored in an array of doubles.
 
@@ -64,4 +67,4 @@ Finally, the postfix expression is evaluated using a stack-based approach.
 
 The AVR microcontroller efficiently processes each element of the expression and computes the result, adhering to the rules of the postfix notation.
 
-This project's modular design and layered architecture make it flexible for future enhancements and adaptations.
+**This project's modular design and layered architecture make it flexible for future enhancements and adaptations.**
