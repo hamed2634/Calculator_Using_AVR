@@ -30,13 +30,13 @@ The calculator supports basic arithmetic operations such as addition, subtractio
 
 Check out the testing video to see the calculator in action:
 
-[Testing_Video](\Stimulation\Testing_Video.mp4)
+[Testing_Video](Stimulation/Testing_Video.mp4)
 
 ### Circuit Connection 📷
 
 Here's a photo showcasing the circuit connections:
 
-![Circuit_Connection](\Stimulation\Circuit_Connection.png)
+![Circuit_Connection](Stimulation/Circuit_Connection.png)
 
 ## How It Works 🛠️
 
