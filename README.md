@@ -4,15 +4,15 @@ This embedded project implements a calculator using the AVR architecture, organi
 
 ## Table of Contents 📚
 
-- [Facilities](#facilities)
-- [Supported Calculations](#supported-calculations)
-- [How It Works](#how-it-works)
-  - [Expression Conversion](#expression-conversion)
-  - [Variable Storage](#variable-storage)
-  - [Infix to Postfix Conversion](#infix-to-postfix-conversion)
-  - [Postfix Evaluation](#postfix-evaluation)
+- [Construction](#construction-)
+- [Supported Calculations](#supported-calculations-)
+- [How It Works](#how-it-works-)
+  - [Expression Conversion](#expression-conversion-)
+  - [Variable Storage](#variable-storage-)
+  - [Infix to Postfix Conversion](#infix-to-postfix-conversion-)
+  - [Postfix Evaluation](#postfix-evaluation-)
 
-## Facilities
+## Construction
 
 This calculator project is organized into three layers:
 
