@@ -6520,6 +6520,7 @@ void Run_Calculator(){
 			LCD_DoneCalculating = 0;
     2c2e:	1e 82       	std	Y+6, r1	; 0x06
     2c30:	6a cf       	rjmp	.-300    	; 0x2b06 <Run_Calculator+0x1a>
+
 		}
 		else{
 			if(Local_u8ButtonIsPressed == 'A'){
@@ -6939,11 +6940,11 @@ ES Calc_Expression(){
     2ee4:	0e 94 1f 1a 	call	0x343e	; 0x343e <Calc_Postfix>
     2ee8:	8f 87       	std	Y+15, r24	; 0x0f
 
-    if(Local_enuErrorState == ES_MATH_ERROR) return ES_MATH_ERROR;
+    if(Local_enuErrorState != ES_OK) return Local_enuErrorState;
     2eea:	8f 85       	ldd	r24, Y+15	; 0x0f
-    2eec:	85 30       	cpi	r24, 0x05	; 5
-    2eee:	19 f4       	brne	.+6      	; 0x2ef6 <Calc_Expression+0x36>
-    2ef0:	85 e0       	ldi	r24, 0x05	; 5
+    2eec:	88 23       	and	r24, r24
+    2eee:	19 f0       	breq	.+6      	; 0x2ef6 <Calc_Expression+0x36>
+    2ef0:	8f 85       	ldd	r24, Y+15	; 0x0f
     2ef2:	8c 8b       	std	Y+20, r24	; 0x14
     2ef4:	4a c1       	rjmp	.+660    	; 0x318a <Calc_Expression+0x2ca>
     if(Local_DoubleResult > MAXNUMBER) return ES_OVERFLOW;

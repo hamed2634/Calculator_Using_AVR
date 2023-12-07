@@ -184,7 +184,7 @@ ES Calc_Expression(){
     double Local_DoubleResult;
     Local_enuErrorState = Calc_Postfix(&Local_DoubleResult);
 
-    if(Local_enuErrorState == ES_MATH_ERROR) return ES_MATH_ERROR;
+    if(Local_enuErrorState != ES_OK) return Local_enuErrorState;
     if(Local_DoubleResult > MAXNUMBER) return ES_OVERFLOW;
 
     u8 Local_Idx = 0;
